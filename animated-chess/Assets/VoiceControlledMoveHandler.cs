@@ -67,7 +67,7 @@ public class VoiceControlledMoveHandler : MonoBehaviour
             }
             else
             {
-                Debug.Log("No se puede realizar el movimiento especificado.");
+                Debug.LogWarning("No se puede realizar el movimiento especificado.");
             }
         }
         else
@@ -76,13 +76,23 @@ public class VoiceControlledMoveHandler : MonoBehaviour
             GameObject piece = ChessMgr.instance.PieceAtGrid(coordsOrigin);
             if (piece == false)
             {
-                Debug.Log("No se encuentra la pieza en esa posición.");
+                Debug.LogWarning("No se encuentra la pieza en esa posición.");
             }
             else
             {
                 ChessMgr.instance.Move(piece, coordsDest);
             }
         }
+    }
 
+    public void OnServerResponse(string response){
+        string[] parts = response.Split(',');
+        if(parts.Length != 3){
+            Debug.LogError("Respuesta del servidor incorrecta");
+        }
+        if (parts[2][0] != '1') {
+            Debug.LogWarning("No es tu turno");
+        }
+        MovePiece(parts[0], parts[1]);
     }
 }
