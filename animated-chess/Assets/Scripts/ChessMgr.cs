@@ -42,6 +42,14 @@ public class ChessMgr : MonoBehaviour
         instance = this;
     }
 
+    public char GetCurrentPlayer(){
+        if(currentPlayer == white)
+        {
+            return 'w';
+        }
+        return 'b';
+    }
+
     void Start ()
     {
         pieces = new GameObject[8, 8];
@@ -101,7 +109,13 @@ public class ChessMgr : MonoBehaviour
             for (int j = 0; j < 8; j++)
             {
                 GameObject p = pieces[i, j];
-                ChessPiece ePiece = p.GetComponent<ChessPiece>(); // activate Chess Piece 
+                if(p == null) {
+                    continue;
+                }
+                ChessPiece ePiece = p.GetComponent<ChessPiece>(); // activate Chess Piece
+                if(ePiece == null){
+                    continue;
+                }
                 if (ePiece.type == chessType)
                 {
                     piecesList.Add(p);

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MoveSelect : MonoBehaviour
@@ -22,6 +23,26 @@ public class MoveSelect : MonoBehaviour
         tileHighlight.SetActive(false);
     }
 
+    public void MakeTheMove(GameObject movingPiece, Vector2Int gridPoint)
+    {
+        this.movingPiece = movingPiece;
+        if (ChessMgr.instance.PieceAtGrid(gridPoint) == null)
+        {
+            ChessMgr.instance.Move(movingPiece, gridPoint);
+            //ExitState(movingPiece, gridPoint); //with cc
+            ExitState(movingPiece, Grid.PointFromGrid(gridPoint)); //with nma
+        }
+        else
+        {
+            Debug.Log("in Move Select: ");
+            GameObject pieceToCapture = ChessMgr.instance.CapturePieceAt(gridPoint);
+            Debug.Log("Claim Piece: " + pieceToCapture.name);
+            ChessMgr.instance.Move(movingPiece, gridPoint);
+            ExitState(movingPiece, Grid.PointFromGrid(gridPoint), pieceToCapture); //to handle animation
+        }
+        ExitState();
+    }
+
     void Update ()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -38,19 +59,8 @@ public class MoveSelect : MonoBehaviour
                 if (!moveLocations.Contains(gridPoint)) {
                     CancelMove();
                     return;
-                } else {
-                    if (ChessMgr.instance.PieceAtGrid(gridPoint) == null) {
-                        ChessMgr.instance.Move(movingPiece, gridPoint);
-                        //ExitState(movingPiece, gridPoint); //with cc
-                        ExitState(movingPiece, Grid.PointFromGrid(gridPoint)); //with nma
-                    } else {
-                        Debug.Log("in Move Select: ");
-                        GameObject pieceToCapture = ChessMgr.instance.CapturePieceAt(gridPoint);
-                        Debug.Log("Claim Piece: " + pieceToCapture.name);
-                        ChessMgr.instance.Move(movingPiece, gridPoint);
-                        ExitState(movingPiece, Grid.PointFromGrid(gridPoint),pieceToCapture); //to handle animation
-                    }
                 }
+                MakeTheMove(movingPiece, gridPoint);
                 // Reference Point 3: capture enemy piece here later
                 ExitState();
             }
@@ -118,12 +128,6 @@ public class MoveSelect : MonoBehaviour
         {
             Destroy(highlight);
         }
-    }
-
-    private void ExitState(GameObject movingPiece, Vector2Int gridPoint) {
-        this.enabled = false;
-        Move move = GetComponent<Move>();
-        move.EnterState(movingPiece, gridPoint);
     }
 
     private void ExitState(GameObject movingPiece, Vector3 point) {

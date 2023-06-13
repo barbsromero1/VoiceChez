@@ -6,11 +6,11 @@ using UnityEngine.AI;
 public class Move : MonoBehaviour
 {
     public float chessPieceSpeed;
-    private Vector3 moveLocation; 
-    private GameObject movingPiece;
-    private ChessPiece cPiece;
-    private GameObject enemyPiece;
-    private ChessPiece ePiece;
+    public Vector3 moveLocation; 
+    public GameObject movingPiece;
+    public ChessPiece cPiece;
+    public GameObject enemyPiece;
+    public ChessPiece ePiece;
     private CharacterController cc;
     private NavMeshAgent nma; 
     private Animator anim;

@@ -45,12 +45,20 @@ public class VoiceControlledMoveHandler : MonoBehaviour
         return false;
     }
 
+    public void MakeTheMove(GameObject piece, Vector2Int pos)
+    {
+        MoveSelect moveSelect = ChessMgr.instance.board.GetComponent<MoveSelect>();
+        moveSelect.enabled = true;
+        moveSelect.MakeTheMove(piece, pos);
+    }
+
+
+
     public void MovePiece(string coords0, string coords1)
     {
         Vector2Int coordsDest = ParseCoords(coords1);
 
-        if (char.IsUpper(coords0[0]) && coords0[1] == ' ')
-        {
+        if (char.IsUpper(coords0[0])){
             ChessPieceType chessType = ParsePiece(coords0[0]);
             List<GameObject> possiblePieces = ChessMgr.instance.FindPiecesOfType(chessType);
             List<GameObject> movablePieces = new List<GameObject>();
@@ -63,7 +71,7 @@ public class VoiceControlledMoveHandler : MonoBehaviour
             }
             if (movablePieces.Count == 1)
             {
-                ChessMgr.instance.Move(movablePieces[0], coordsDest);
+                MakeTheMove(movablePieces[0], coordsDest);
             }
             else
             {
@@ -80,7 +88,7 @@ public class VoiceControlledMoveHandler : MonoBehaviour
             }
             else
             {
-                ChessMgr.instance.Move(piece, coordsDest);
+                MakeTheMove(piece, coordsDest);
             }
         }
     }
