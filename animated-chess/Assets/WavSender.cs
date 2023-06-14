@@ -42,7 +42,7 @@ public class WavSender : MonoBehaviour
         byte[] wav = ReadWav(filename);
         int wavSize = wav.Length;
 
-        SendMetadata('b', wavSize); //TODO: leer jugador actual
+        SendMetadata(ChessMgr.instance.GetCurrentPlayer(), wavSize); //TODO: leer jugador actual
 
         // Send wav data
         stream.Write(wav, 0, wav.Length);

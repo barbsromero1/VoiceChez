@@ -29,7 +29,7 @@ public class VoiceControlledMoveHandler : MonoBehaviour
     {
         int x = coords[0] - 'a';
         int y = int.Parse(coords[1] + "");
-        return new Vector2Int(x, y);
+        return new Vector2Int(x, y-1);
     }
 
     public bool CanMoveToPosition(GameObject piece, Vector2Int coords)
